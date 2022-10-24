@@ -71,8 +71,7 @@ export const Separator = styled.div`
   justify-content: center;
 `;
 
-export const StartCoutdownButton = styled.button`
-  background: ${(props) => props.theme["green-500"]};
+export const BaseCoutdownButton = styled.button`
   color: ${(props) => props.theme["gray-100"]};
 
   width: 100%;
@@ -95,6 +94,23 @@ export const StartCoutdownButton = styled.button`
   }
   &:not(:disabled):hover {
     background: ${(props) => props.theme["green-700"]};
+  }
+`;
+
+export const StartCoutdownButton = styled(BaseCoutdownButton)`
+  background: ${(props) => props.theme["green-500"]};
+  color: ${(props) => props.theme["gray-100"]};
+
+  &:not(:disabled):hover {
+    background: ${(props) => props.theme["green-700"]};
+  }
+`;
+
+export const StopCoutdownButton = styled(BaseCoutdownButton)`
+  background: ${(props) => props.theme["red-500"]};
+
+  &:not(:disabled):hover {
+    background: ${(props) => props.theme["red-700"]};
   }
 `;
 
