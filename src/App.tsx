@@ -5,13 +5,16 @@ import { BrowserRouter } from "react-router-dom";
 
 import { Header } from "./Components/Header";
 import { Router } from "./Router";
+import { CyclesContextProvider } from "./contexts/CyclesContenxt";
 
 export function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyle />
       <BrowserRouter>
-        <Router />
+        <CyclesContextProvider>
+          <Router />
+        </CyclesContextProvider>
       </BrowserRouter>
     </ThemeProvider>
   );
