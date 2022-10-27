@@ -1,13 +1,11 @@
-import { createContext, ReactNode, useContext, useState } from "react";
-
-interface Cycle {
-  id: string;
-  task: string;
-  minutesAmount: number;
-  startDate: Date;
-  interruptDate?: Date;
-  finishedDate?: Date;
-}
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useReducer,
+  useState,
+} from "react";
+import { ActionTypes, Cycle, cyclesReducer } from "../reducers/cycles";
 
 interface CreateCycleData {
   task: string;
@@ -33,21 +31,24 @@ interface CyclesContextProviderProps {
 export function CyclesContextProvider({
   children,
 }: CyclesContextProviderProps) {
-  const [cycles, setCycles] = useState<Cycle[]>([]);
-  const [activeCycleId, setActiveCycleId] = useState<string | null>(null);
+  const [cyclesState, dispatch] = useReducer(
+    cyclesReducer,
+
+    { cycles: [], activeCycleId: null }
+  );
+
+  const { cycles, activeCycleId } = cyclesState;
+
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(0);
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
 
   function markCurrentCycleAsFinished() {
-    setCycles((oldState) =>
-      oldState.map((cycle) => {
-        if (cycle.id === activeCycleId) {
-          return { ...cycle, interruptDate: new Date() };
-        } else {
-          return cycle;
-        }
-      })
-    );
+    dispatch({
+      type: ActionTypes.MARK_CURRENT_CYCLE_AS_FINISHED,
+      payload: {
+        activeCycleId,
+      },
+    });
   }
 
   function setSecondsPassed(seconds: number) {
@@ -64,13 +65,23 @@ export function CyclesContextProvider({
       startDate: new Date(),
     };
 
-    setCycles((oldState) => [...oldState, newCycle]);
-    setActiveCycleId(id);
+    dispatch({
+      type: ActionTypes.ADD_NEW_CYCLE,
+      payload: {
+        newCycle,
+      },
+    });
+
     setAmountSecondsPassed(0);
   }
 
   function interruptCurrentCycle() {
-    setActiveCycleId(null);
+    dispatch({
+      type: ActionTypes.INTERRUPT_CURRENT_CYCLE,
+      paylaoad: {
+        activeCycleId,
+      },
+    });
   }
 
   return (
