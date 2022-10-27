@@ -1,5 +1,6 @@
 import { ActionTypes } from "./actions";
 import { produce } from "immer";
+
 interface CyclesState {
   cycles: Cycle[];
   activeCycleId: String | null;
